@@ -2,18 +2,15 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.security.Key;
 
-public class Main extends JFrame {
+public class Keysboard extends JFrame {
 
     private MidiChannel[] mc;
 
-    public Main(Synthesizer syn){
+    public Keysboard(Synthesizer syn, int instrNum){
         mc = syn.getChannels();
         Instrument[] instr = syn.getDefaultSoundbank().getInstruments();
-        syn.loadInstrument(instr[14]);
-        mc[0].programChange(78);
+        mc[0].programChange(instrNum);
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 mc[0].noteOn(toPitch(e),600);
@@ -25,10 +22,10 @@ public class Main extends JFrame {
         });
     }
 
-    public static void main(String[] argss) throws MidiUnavailableException{
+    public static void main(String[] args) throws MidiUnavailableException{
         Synthesizer syn = MidiSystem.getSynthesizer();
         syn.open();
-        JFrame frame = new Main(syn);
+        JFrame frame = new Keysboard(syn, 78);
         JLabel name = new JLabel("Keysboard");
         name.setFont(name.getFont().deriveFont(64.0f));
         frame.getContentPane().add(name);
